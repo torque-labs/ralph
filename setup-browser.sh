@@ -25,12 +25,19 @@ else
   echo "Using existing sandbox '$SANDBOX_NAME'"
 fi
 
+# Start the container if not running
+if ! docker ps --format '{{.Names}}' | grep -q "^${SANDBOX_NAME}$"; then
+  echo "Starting sandbox container..."
+  docker start "$SANDBOX_NAME"
+  sleep 2
+fi
+
 echo "Installing Playwright and Chromium..."
 echo ""
 
 # Install directly using docker exec on the sandbox container
 echo "Running installation in sandbox..."
-docker exec -it "$SANDBOX_NAME" bash -c "
+docker exec "$SANDBOX_NAME" bash -c "
   echo 'Installing Playwright...'
   npm install -g playwright @playwright/test
 
