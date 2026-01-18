@@ -37,6 +37,19 @@ ralph-turbo.sh 10
 - `PRD.json` - Structured task list with phases and status
 - `progress.json` - Iteration history with timestamps, changes, and summaries
 
+## Browser Automation (Optional)
+
+Enable Ralph to test UI features autonomously with Playwright:
+
+```bash
+./setup-browser.sh
+```
+
+This installs Playwright and Chromium in the sandbox. Ralph can then:
+- Run Playwright tests: `npx playwright test`
+- Generate tests interactively: `npx playwright codegen https://example.com`
+- Script browser interactions directly
+
 ## Requirements
 
 - Claude Code CLI

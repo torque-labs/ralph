@@ -67,6 +67,23 @@ You have access to the Task tool to spawn sub-agents:
 - **Bash agent**: For running builds, tests, commands
 - **Plan agent**: For designing implementation approaches
 
+## BROWSER AUTOMATION
+You have Playwright installed with Chromium for headless browser testing:
+- Run tests: `npx playwright test`
+- Run specific test: `npx playwright test tests/example.spec.ts`
+- Debug mode: `npx playwright test --debug`
+- Generate tests: `npx playwright codegen https://example.com`
+- Direct scripting:
+  ```javascript
+  const { chromium } = require('playwright');
+  const browser = await chromium.launch();
+  const page = await browser.newPage();
+  await page.goto('http://localhost:3000');
+  // ... interact with page
+  await browser.close();
+  ```
+Use browser automation to verify UI features work correctly without human intervention.
+
 ## WORKFLOW (JSON PRD)
 1. Read PRD.json and progress.json to understand current state
 2. Identify ALL tasks with `"status": "pending"`
@@ -142,6 +159,23 @@ You have access to the Task tool to spawn sub-agents:
 - **Explore agent**: For codebase exploration, finding files, understanding patterns
 - **Bash agent**: For running builds, tests, commands
 - **Plan agent**: For designing implementation approaches
+
+## BROWSER AUTOMATION
+You have Playwright installed with Chromium for headless browser testing:
+- Run tests: `npx playwright test`
+- Run specific test: `npx playwright test tests/example.spec.ts`
+- Debug mode: `npx playwright test --debug`
+- Generate tests: `npx playwright codegen https://example.com`
+- Direct scripting:
+  ```javascript
+  const { chromium } = require('playwright');
+  const browser = await chromium.launch();
+  const page = await browser.newPage();
+  await page.goto('http://localhost:3000');
+  // ... interact with page
+  await browser.close();
+  ```
+Use browser automation to verify UI features work correctly without human intervention.
 
 ## WORKFLOW
 1. Read PRD.md and progress.json to understand current state
