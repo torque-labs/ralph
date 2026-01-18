@@ -11,35 +11,37 @@ echo "  Setting up Playwright in Ralph sandbox"
 echo "============================================"
 echo ""
 
-# Check if sandbox exists
+# Check if sandbox exists, create if not
 if ! docker sandbox ls 2>/dev/null | grep -q "$SANDBOX_NAME"; then
   echo "Creating sandbox '$SANDBOX_NAME'..."
-  docker sandbox run --name "$SANDBOX_NAME" claude --version || {
+  docker sandbox create --name "$SANDBOX_NAME" || {
     echo ""
-    echo "Sandbox needs authentication. Please run:"
-    echo "  docker sandbox run --name $SANDBOX_NAME claude"
-    echo "Then authenticate, /exit, and run this script again."
+    echo "Failed to create sandbox. Please run:"
+    echo "  docker sandbox create --name $SANDBOX_NAME"
+    echo "Then run this script again."
     exit 1
   }
+else
+  echo "Using existing sandbox '$SANDBOX_NAME'"
 fi
 
 echo "Installing Playwright and Chromium..."
 echo ""
 
-SETUP_PROMPT=$(cat << 'PROMPT_EOF'
-Run these commands to install Playwright with Chromium browser:
+# Install directly using docker exec on the sandbox container
+echo "Running installation in sandbox..."
+docker exec -it "$SANDBOX_NAME" bash -c "
+  echo 'Installing Playwright...'
+  npm install -g playwright @playwright/test
 
-1. npm install -g playwright @playwright/test
-2. npx playwright install chromium --with-deps
-3. npx playwright --version
+  echo ''
+  echo 'Installing Chromium browser (this may take a few minutes)...'
+  npx playwright install chromium --with-deps
 
-Run all three commands and confirm the installation succeeded.
-PROMPT_EOF
-)
-
-docker sandbox run --name "$SANDBOX_NAME" claude \
-  --permission-mode acceptEdits \
-  -p "$SETUP_PROMPT"
+  echo ''
+  echo 'Verifying installation...'
+  npx playwright --version
+"
 
 echo ""
 echo "============================================"
