@@ -26,18 +26,20 @@ fi
 echo "Installing Playwright and Chromium..."
 echo ""
 
-docker sandbox run --name "$SANDBOX_NAME" bash -c "
-  echo 'Installing Playwright...'
-  npm install -g playwright @playwright/test
+SETUP_PROMPT=$(cat << 'PROMPT_EOF'
+Run these commands to install Playwright with Chromium browser:
 
-  echo ''
-  echo 'Installing Chromium browser...'
-  npx playwright install chromium --with-deps
+1. npm install -g playwright @playwright/test
+2. npx playwright install chromium --with-deps
+3. npx playwright --version
 
-  echo ''
-  echo 'Verifying installation...'
-  npx playwright --version
-"
+Run all three commands and confirm the installation succeeded.
+PROMPT_EOF
+)
+
+docker sandbox run --name "$SANDBOX_NAME" claude \
+  --permission-mode acceptEdits \
+  -p "$SETUP_PROMPT"
 
 echo ""
 echo "============================================"
